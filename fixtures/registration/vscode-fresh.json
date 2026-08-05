@@ -1,0 +1,13 @@
+{
+  "surface": "vscode",
+  "before": null,
+  "after": {
+    "servers": {
+      "strata": {
+        "type": "stdio",
+        "command": "__STRATA_BIN__",
+        "args": ["--db", "__DB_PATH__", "mcp", "serve"]
+      }
+    }
+  }
+}

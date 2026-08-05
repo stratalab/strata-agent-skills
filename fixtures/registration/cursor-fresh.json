@@ -1,0 +1,12 @@
+{
+  "surface": "cursor",
+  "before": null,
+  "after": {
+    "mcpServers": {
+      "strata": {
+        "command": "__STRATA_BIN__",
+        "args": ["--db", "__DB_PATH__", "mcp", "serve"]
+      }
+    }
+  }
+}
