@@ -1,0 +1,44 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        node: [18, 22]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm ci
+      - run: npm test
+
+  e2e:
+    # The N4 end-to-end lane: a real strata CLI built from strata-core, a real
+    # init run, and a real MCP handshake through the written entry.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/checkout@v4
+        with:
+          repository: stratalab/strata-core
+          path: strata-core
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: strata-core
+      - run: cargo build -p strata-cli
+        working-directory: strata-core
+        env:
+          CARGO_NET_GIT_FETCH_WITH_CLI: "true"
+      - run: npm ci
+      - run: STRATA_BIN="$GITHUB_WORKSPACE/strata-core/target/debug/strata" npm test

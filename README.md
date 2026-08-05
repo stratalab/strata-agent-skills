@@ -30,10 +30,36 @@ surfaces (the [VS Code extension](https://github.com/stratalab/strata-vscode))
 watch the agent's writes live. This repo is how agents *reach* that server, never a
 second implementation of it.
 
+## Usage
+
+```bash
+npx strata init             # detect agents, register the MCP server, install skills
+npx strata init --check     # report state, change nothing
+npx strata init --remove    # undo everything init wrote
+npx strata init --yes --json  # agent-operable: no prompts, machine-readable result
+npx strata mcp              # exec the installed CLI's `strata mcp serve`
+```
+
+Flags: `--db <path>` (choose among multiple databases), `--binary <path>`
+(explicit CLI), `--all` / `--surface <id,…>` (register unconditionally;
+`claude-desktop` is explicit-only since it is user-global), `--no-skills`.
+
+The registered entry (VS Code shown; Cursor/Claude Code identical minus `type`):
+
+```json
+{ "type": "stdio", "command": "<abs strata>", "args": ["--db", "<db>", "mcp", "serve"] }
+```
+
+The `fixtures/registration/` directory is the shared contract with the VS Code
+extension's own registration (its F6) — both writers converge on these bytes.
+
 ## Status
 
-Chartered 2026-08-05 (succeeding the retired `strata-mcp` repo). Requirements:
+`init`, `--check`, `--remove`, and the `mcp` passthrough are implemented and
+tested (including an end-to-end lane: real CLI, real database, real MCP
+handshake through the written entry). Skill content is the next deliverable;
+`init` already installs whatever lands in `skills/`. Requirements:
 [`docs/requirements.md`](docs/requirements.md).
 
 npm package name: `strata`, pending the npm dispute for an abandoned 2013 package;
-`strata-db` is the secured fallback.
+`strata-db` is the secured fallback. Not yet published.

@@ -1,0 +1,21 @@
+{
+  "surface": "claude-code",
+  "before": {
+    "mcpServers": {
+      "strata": {
+        "command": "/old/path/strata",
+        "args": ["--db", "/old/db", "mcp", "serve"]
+      },
+      "linear": { "command": "npx", "args": ["-y", "linear-mcp"] }
+    }
+  },
+  "after": {
+    "mcpServers": {
+      "strata": {
+        "command": "__STRATA_BIN__",
+        "args": ["--db", "__DB_PATH__", "mcp", "serve"]
+      },
+      "linear": { "command": "npx", "args": ["-y", "linear-mcp"] }
+    }
+  }
+}

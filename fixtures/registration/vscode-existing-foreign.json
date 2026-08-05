@@ -1,0 +1,20 @@
+{
+  "surface": "vscode",
+  "before": {
+    "inputs": [{ "id": "apiKey", "type": "promptString" }],
+    "servers": {
+      "other-tool": { "type": "stdio", "command": "other", "args": ["--serve"] }
+    }
+  },
+  "after": {
+    "inputs": [{ "id": "apiKey", "type": "promptString" }],
+    "servers": {
+      "other-tool": { "type": "stdio", "command": "other", "args": ["--serve"] },
+      "strata": {
+        "type": "stdio",
+        "command": "__STRATA_BIN__",
+        "args": ["--db", "__DB_PATH__", "mcp", "serve"]
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "strata",
+  "version": "0.1.0",
+  "description": "One command to make Strata usable by every AI agent in your project",
+  "license": "MIT",
+  "repository": "github:stratalab/strata-agent-skills",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "bin": {
+    "strata": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "skills"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "npm run build && node --test",
+    "prepublishOnly": "npm test"
+  },
+  "devDependencies": {
+    "@types/node": "^18.19.0",
+    "typescript": "^5.5.0"
+  }
+}
