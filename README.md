@@ -1,2 +1,39 @@
 # strata-agent-skills
-Everything AI agents need to use Strata — skills, MCP setup, one-command onboarding
+
+**Everything AI agents need to use Strata**, in one repo:
+
+- **Agent skills** (`skills/`) — SKILL.md-format knowledge for Claude Code, Cursor,
+  Codex, and every Agent-Skills-compatible tool: how to use Strata, when to branch,
+  how to time-travel. Installable via `npx skills add stratalab/strata-agent-skills`
+  and bundled into `init`.
+- **The on-ramp** — one command that makes Strata usable by every agent in a project:
+
+  ```bash
+  npx strata init
+  ```
+
+  Verifies or installs the `strata` CLI, registers the Strata MCP server with every
+  agent surface it finds (VS Code, Cursor, Claude Code, Claude Desktop —
+  workspace-scoped, idempotent, reversible), installs the skills, and prints the
+  handoff line: *tell your agent "get started with Strata."*
+
+- **`npx strata mcp`** — resolves the installed CLI and execs `strata mcp serve`,
+  for configs that prefer an npx command to an absolute path.
+
+## What lives elsewhere, on purpose
+
+**The MCP server is not here.** It is `strata mcp serve`, inside the `strata` CLI
+binary ([strata-core](https://github.com/stratalab/strata-core)) — one canonical
+implementation, local stdio, no hosted endpoint, no OAuth: the database is local
+files, air-gapped by construction. It opens the database as an IPC host, so other
+surfaces (the [VS Code extension](https://github.com/stratalab/strata-vscode))
+watch the agent's writes live. This repo is how agents *reach* that server, never a
+second implementation of it.
+
+## Status
+
+Chartered 2026-08-05 (succeeding the retired `strata-mcp` repo). Requirements:
+[`docs/requirements.md`](docs/requirements.md).
+
+npm package name: `strata`, pending the npm dispute for an abandoned 2013 package;
+`strata-db` is the secured fallback.
