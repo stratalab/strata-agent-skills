@@ -19,10 +19,33 @@ jobs:
       - run: npm ci
       - run: npm test
 
-  e2e:
-    # The N4 end-to-end lane: a real strata CLI built from strata-core, a real
-    # init run, and a real MCP handshake through the written entry.
+  # The e2e lane needs to build strata-core's CLI, whose hub crate pins a
+  # private git dependency (stratalab/stratahub). Building therefore needs the
+  # same STRATAHUB_READ_TOKEN strata-core's own CI uses. The gate skips the
+  # lane cleanly (rather than failing) until that secret is granted to this
+  # repo — the unit matrix above always runs.
+  e2e-gate:
     runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.check.outputs.run }}
+    steps:
+      - id: check
+        env:
+          TOKEN: ${{ secrets.STRATAHUB_READ_TOKEN }}
+        run: |
+          if [ -n "$TOKEN" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::STRATAHUB_READ_TOKEN not available to this repo; e2e lane skipped"
+          fi
+
+  e2e:
+    needs: e2e-gate
+    if: needs.e2e-gate.outputs.run == 'true'
+    runs-on: ubuntu-latest
+    env:
+      CARGO_NET_GIT_FETCH_WITH_CLI: "true"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -32,13 +55,15 @@ jobs:
         with:
           repository: stratalab/strata-core
           path: strata-core
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Authorize private git dependencies
+        # Fine-grained PAT with Contents: read on stratalab/stratahub —
+        # mirrors strata-core's own CI.
+        run: git config --global url."https://x-access-token:${{ secrets.STRATAHUB_READ_TOKEN }}@github.com/stratalab/stratahub".insteadOf "https://github.com/stratalab/stratahub"
+      - uses: dtolnay/rust-toolchain@1.94.1
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: strata-core
       - run: cargo build -p strata-cli
         working-directory: strata-core
-        env:
-          CARGO_NET_GIT_FETCH_WITH_CLI: "true"
       - run: npm ci
       - run: STRATA_BIN="$GITHUB_WORKSPACE/strata-core/target/debug/strata" npm test
