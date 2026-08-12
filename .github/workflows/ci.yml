@@ -19,6 +19,26 @@ jobs:
       - run: npm ci
       - run: npm test
 
+  # AR-8: skill substance is generated from strata-core's IDL artifacts at the
+  # pinned STRATA_CORE_REV; this fails when the committed skills are stale
+  # against that rev. Reads committed artifacts only — no Rust build, and
+  # strata-core is public, so no token either.
+  skills-freshness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: pin
+        run: echo "rev=$(cat STRATA_CORE_REV)" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4
+        with:
+          repository: stratalab/strata-core
+          ref: ${{ steps.pin.outputs.rev }}
+          path: strata-core
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/gen-skills.mjs --check --strata-core "$GITHUB_WORKSPACE/strata-core"
+
   # The e2e lane needs to build strata-core's CLI, whose hub crate pins a
   # private git dependency (stratalab/stratahub). Building therefore needs the
   # same STRATAHUB_READ_TOKEN strata-core's own CI uses. The gate skips the
@@ -51,9 +71,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - id: pin
+        run: echo "rev=$(cat STRATA_CORE_REV)" >> "$GITHUB_OUTPUT"
       - uses: actions/checkout@v4
         with:
           repository: stratalab/strata-core
+          ref: ${{ steps.pin.outputs.rev }}
           path: strata-core
       - name: Authorize private git dependencies
         # Fine-grained PAT with Contents: read on stratalab/stratahub —

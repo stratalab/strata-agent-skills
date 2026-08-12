@@ -3,9 +3,23 @@
 **Everything AI agents need to use Strata**, in one repo:
 
 - **Agent skills** (`skills/`) — SKILL.md-format knowledge for Claude Code, Cursor,
-  Codex, and every Agent-Skills-compatible tool: how to use Strata, when to branch,
-  how to time-travel. Installable via `npx skills add stratalab/strata-agent-skills`
-  and bundled into `init`.
+  Codex, and every Agent-Skills-compatible tool:
+  - **`strata`** — what Strata is, which primitive when, the MCP tool surface and
+    its `strata_command` escape hatch, error-code discipline. Ships the full
+    command catalog and error registry as references.
+  - **`strata-branching`** — branch-per-agent isolation patterns, fork anchors,
+    the no-merge rule.
+  - **`strata-time-travel`** — `as_of` reads, history, retention and
+    `history_unavailable`.
+
+  Install any way you like: `npx strata init` (bundled),
+  `npx skills add stratalab/strata-agent-skills`, or
+  `/plugin marketplace add stratalab/strata-agent-skills` in Claude Code.
+
+  Skills are **authored structure + generated substance**: workflow prose is
+  written by hand; command tables, error codes, and catalogs are rendered from
+  strata-core's IDL artifacts at the rev pinned in `STRATA_CORE_REV`
+  (`npm run skills:gen`), and CI fails if they drift (`npm run skills:check`).
 - **The on-ramp** — one command that makes Strata usable by every agent in a project:
 
   ```bash
@@ -55,10 +69,10 @@ extension's own registration (its F6) — both writers converge on these bytes.
 
 ## Status
 
-`init`, `--check`, `--remove`, and the `mcp` passthrough are implemented and
-tested (including an end-to-end lane: real CLI, real database, real MCP
-handshake through the written entry). Skill content is the next deliverable;
-`init` already installs whatever lands in `skills/`. Requirements:
+`init`, `--check`, `--remove`, the `mcp` passthrough, and the three skills are
+implemented and tested (including an end-to-end lane: real CLI, real database,
+real MCP handshake through the written entry, skills installed and removed).
+`--check` reports installed-skill freshness against the bundle. Requirements:
 [`docs/requirements.md`](docs/requirements.md).
 
 npm package name: `strata`, pending the npm dispute for an abandoned 2013 package;

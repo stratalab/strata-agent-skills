@@ -1,0 +1,8 @@
+{
+  "name": "strata",
+  "version": "0.1.0",
+  "description": "Skills for Strata — the embedded, branch-native database for AI agents",
+  "author": { "name": "Strata Labs", "url": "https://github.com/stratalab" },
+  "license": "MIT",
+  "skills": "./skills/"
+}

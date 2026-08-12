@@ -18,6 +18,8 @@
   "scripts": {
     "build": "tsc",
     "test": "npm run build && node --test",
+    "skills:gen": "node scripts/gen-skills.mjs",
+    "skills:check": "node scripts/gen-skills.mjs --check",
     "prepublishOnly": "npm test"
   },
   "devDependencies": {

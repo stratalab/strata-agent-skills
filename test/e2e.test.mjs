@@ -48,6 +48,15 @@ test("e2e: init registers a real database and the MCP entry answers a handshake"
   }
   assert.match(report.handoff, /get started with Strata/);
 
+  // Skills land with init (F5) and are byte-identical to the bundle.
+  assert.deepEqual(report.skills.skills, ["strata", "strata-branching", "strata-time-travel"]);
+  for (const name of report.skills.skills) {
+    assert.ok(
+      existsSync(path.join(root, ".claude", "skills", name, "SKILL.md")),
+      `skill ${name} installed`,
+    );
+  }
+
   // The written entry, exactly as an agent host would use it.
   const vscode = JSON.parse(readFileSync(path.join(root, ".vscode", "mcp.json"), "utf8"));
   const entry = vscode.servers.strata;
@@ -95,4 +104,6 @@ test("e2e: init registers a real database and the MCP entry answers a handshake"
   const removed = runInit(root, ["--remove", "--json"]);
   assert.equal(removed.status, 0, removed.stderr);
   assert.equal(existsSync(path.join(root, ".vscode", "mcp.json")), false, "fresh config deleted");
+  assert.equal(JSON.parse(removed.stdout).skills.action, "removed");
+  assert.equal(existsSync(path.join(root, ".claude", "skills", "strata")), false, "skills removed");
 });
