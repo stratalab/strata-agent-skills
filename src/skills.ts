@@ -8,9 +8,14 @@ import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 
 export interface SkillsResult {
-  action: "installed" | "refreshed" | "none" | "skipped";
+  action: "installed" | "refreshed" | "removed" | "none" | "skipped";
   skills: string[];
   note?: string;
+}
+
+export interface SkillCheck {
+  name: string;
+  state: "current" | "stale" | "missing";
 }
 
 function bundledSkillsDir(): string {
@@ -65,5 +70,29 @@ export function removeSkills(root: string): SkillsResult {
       removed.push(entry.name);
     }
   }
-  return { action: removed.length > 0 ? "installed" : "none", skills: removed };
+  return { action: removed.length > 0 ? "removed" : "none", skills: removed };
+}
+
+// Freshness report for `--check` (F3.1/F5.2): each bundled skill is compared
+// against the workspace copy by its SKILL.md bytes — the frontmatter carries
+// the pinned strata-core rev, so byte equality is version equality.
+export function checkSkills(root: string): SkillCheck[] {
+  const source = bundledSkillsDir();
+  if (!fs.existsSync(source)) return [];
+  const checks: SkillCheck[] = [];
+  for (const entry of fs.readdirSync(source, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    const bundled = path.join(source, entry.name, "SKILL.md");
+    if (!fs.existsSync(bundled)) continue;
+    const installed = path.join(root, ".claude", "skills", entry.name, "SKILL.md");
+    let state: SkillCheck["state"] = "missing";
+    if (fs.existsSync(installed)) {
+      state =
+        fs.readFileSync(installed, "utf8") === fs.readFileSync(bundled, "utf8")
+          ? "current"
+          : "stale";
+    }
+    checks.push({ name: entry.name, state });
+  }
+  return checks.sort((a, b) => a.name.localeCompare(b.name));
 }

@@ -64,8 +64,16 @@ export const SURFACES: readonly Surface[] = [
     rootKey: "mcpServers",
     explicitStdioType: false,
     configPath: (root) => path.join(root, ".mcp.json"),
-    detect: (root) =>
-      fs.existsSync(path.join(root, ".mcp.json")) || fs.existsSync(path.join(root, ".claude")),
+    detect: (root) => {
+      if (fs.existsSync(path.join(root, ".mcp.json"))) return true;
+      const dir = path.join(root, ".claude");
+      if (!fs.existsSync(dir)) return false;
+      // `.claude/skills` alone is not evidence the user runs Claude Code —
+      // init itself (and the skills CLI) writes skills there as the
+      // interchange location. Counting it would make init's own first run
+      // flip this surface on for the second run (non-convergent).
+      return fs.readdirSync(dir).some((name) => name !== "skills");
+    },
     workspaceScoped: true,
   },
   {

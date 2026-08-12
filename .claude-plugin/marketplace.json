@@ -1,0 +1,18 @@
+{
+  "name": "strata",
+  "description": "Skills for Strata — the embedded, branch-native database for AI agents",
+  "owner": {
+    "name": "Strata Labs",
+    "url": "https://github.com/stratalab"
+  },
+  "plugins": [
+    {
+      "name": "strata",
+      "source": "./",
+      "description": "Use Strata from any agent: core usage, branching patterns, and time travel",
+      "version": "0.1.0",
+      "category": "database",
+      "tags": ["database", "embedded", "branching", "time-travel", "vectors", "mcp"]
+    }
+  ]
+}

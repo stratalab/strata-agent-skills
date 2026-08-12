@@ -1,0 +1,10 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "groupings": [
+    {
+      "title": "Strata",
+      "description": "The embedded, branch-native database for AI agents: core usage, branching patterns, and time travel.",
+      "skills": ["strata", "strata-branching", "strata-time-travel"]
+    }
+  ]
+}

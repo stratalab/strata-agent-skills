@@ -11,7 +11,7 @@ import * as readline from "node:readline/promises";
 import { resolveCli, installPlan, runInstall, CliResolveError } from "./cli-resolve.js";
 import { CLI_BIN, DEFAULT_DB_DIRNAME, HANDOFF_LINE, INSTALL_HINT } from "./constants.js";
 import { check, register, remove, type SurfaceResult } from "./registration.js";
-import { installSkills, removeSkills } from "./skills.js";
+import { checkSkills, installSkills, removeSkills } from "./skills.js";
 import { SURFACES, surfaceById, type Surface } from "./surfaces.js";
 import { findDatabases } from "./workspace.js";
 
@@ -161,8 +161,11 @@ async function runInit(args: string[]): Promise<number> {
     const db = flags.db !== undefined ? path.resolve(flags.db) : findDatabases(root)[0];
     const results = (flags.all ? [...SURFACES] : surfaces.length > 0 ? surfaces : [...SURFACES])
       .map((surface) => check(surface, root, cli?.path, db));
+    const skills = checkSkills(root);
     if (flags.json) {
-      process.stdout.write(`${JSON.stringify({ cli: cli ?? null, database: db ?? null, surfaces: results }, null, 2)}\n`);
+      process.stdout.write(
+        `${JSON.stringify({ cli: cli ?? null, database: db ?? null, surfaces: results, skills }, null, 2)}\n`,
+      );
     } else {
       for (const r of results) {
         const state = r.action === "failed" ? `malformed (${r.reason})`
@@ -170,6 +173,12 @@ async function runInit(args: string[]): Promise<number> {
           : r.current ? "registered (current)"
           : "registered (stale entry)";
         process.stdout.write(`${r.detected ? "detected " : "         "} ${r.surface.padEnd(15)} ${state}\n`);
+      }
+      for (const skill of skills) {
+        const state = skill.state === "current" ? "installed (current)"
+          : skill.state === "stale" ? "installed (stale — rerun init)"
+          : "not installed";
+        process.stdout.write(`          skill ${skill.name.padEnd(20)} ${state}\n`);
       }
       process.stdout.write(cli ? `cli: ${cli.path} (${cli.version})\n` : `cli: not found\n`);
     }
