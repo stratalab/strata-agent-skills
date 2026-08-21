@@ -11,7 +11,7 @@ description: >-
   branch naming rules, and the branch error codes.
 license: MIT
 metadata:
-  strata-core-rev: "2556b6be18dd2a7c297c3d37e7831df4436c6df5"
+  strata-core-rev: "736f855dfcffc3ccf035d55a124681db95a11e1f"
   cli-version-range: "1.x"
 ---
 
