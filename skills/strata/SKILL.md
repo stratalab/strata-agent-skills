@@ -12,7 +12,7 @@ description: >-
   branch/space scoping, and error-code discipline.
 license: MIT
 metadata:
-  strata-core-rev: "2556b6be18dd2a7c297c3d37e7831df4436c6df5"
+  strata-core-rev: "736f855dfcffc3ccf035d55a124681db95a11e1f"
   cli-version-range: "1.x"
 ---
 
@@ -124,8 +124,9 @@ Notes that save round trips:
 `strata_command` submits one raw wire command, so the entire catalog is
 reachable even though only the common tools are curated. **History
 (`kv_history`, `json_history`, `vector_history`), branch create/delete,
-batches, spaces, arrow import/export, and graph analytics are only reachable
-this way** — do not conclude a capability is missing because there is no
+batches, spaces, arrow import/export, graph analytics, and admin/status
+(`info`) are only reachable this way** — do not conclude a capability is
+missing because there is no
 dedicated tool for it.
 
 ```json
@@ -141,6 +142,39 @@ The full catalog with wire types and one-line summaries is in
 command's arguments, send a best effort — the wire deserializer names the
 offending field and the valid set, and that error is the fastest
 documentation.
+
+## Inspect the database
+
+`admin_info` — the `info` command, reachable through `strata_command` —
+returns the database's identity plus what it is actually sized to run on:
+
+```json
+{ "command": { "type": "info" } }
+```
+
+The `data.memory_budget` field reports the resolved storage budget and where
+it came from:
+
+```json
+{ "memory_budget": { "total_bytes": 536870912,
+                     "source": "derived_from_host",
+                     "usable_host_bytes": 2147483648 } }
+```
+
+When no budget is set explicitly, Strata derives one at open — 25% of usable
+host memory, capped at an 8 GiB ceiling — so the same binary sizes itself
+sanely on both a small edge device and a large server. `source` names the
+rule that applied:
+
+- `explicit` — a budget the caller set; `usable_host_bytes` is absent.
+- `derived_from_host` — the auto-derived default; `usable_host_bytes` is the
+  memory Strata detected.
+- `fixed_default` — the 512 MiB fallback, used when the host memory cannot be
+  probed.
+
+If the database feels memory-starved on a constrained host, read
+`memory_budget` first: it tells you whether the derivation, an explicit
+override, or the probe fallback is in effect.
 
 ## Responses and errors
 
