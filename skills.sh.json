@@ -3,8 +3,8 @@
   "groupings": [
     {
       "title": "Strata",
-      "description": "The embedded, branch-native database for AI agents: core usage, branching patterns, and time travel.",
-      "skills": ["strata", "strata-branching", "strata-time-travel"]
+      "description": "The embedded, branch-native database for AI agents: core usage, branching patterns, time travel, and the Python SDK.",
+      "skills": ["strata", "strata-branching", "strata-time-travel", "strata-python"]
     }
   ]
 }

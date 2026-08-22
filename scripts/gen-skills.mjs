@@ -63,6 +63,9 @@ const EXPECTED_SECTIONS = {
   "skills/strata/references/errors.md": ["error-catalog"],
   "skills/strata-branching/SKILL.md": ["branch-commands", "branch-errors"],
   "skills/strata-time-travel/SKILL.md": ["asof-commands", "history-commands"],
+  // Authored-only: its substance is the stratadb SDK surface (vendored by the
+  // wheel as stratadb.agents_skill()), not an IDL artifact — still pin-stamped.
+  "skills/strata-python/SKILL.md": [],
 };
 
 // ---- argument parsing -------------------------------------------------------

@@ -11,10 +11,15 @@
     the no-merge rule.
   - **`strata-time-travel`** — `as_of` reads, history, retention and
     `history_unavailable`.
+  - **`strata-python`** — the Python face of the set: `stratadb.open()` and
+    its durability/IPC/memory-budget options, every `db.<namespace>`, return
+    shapes (`None` on miss, receipts, `Page`), `db.at()` branching, typed
+    errors, and the sharp edges. The `stratadb` wheel vendors this skill and
+    `stratadb.init()` installs it, so pip-only projects get it offline.
 
-  Install any way you like: `npx strata init` (bundled),
-  `npx skills add stratalab/strata-agent-skills`, or
-  `/plugin marketplace add stratalab/strata-agent-skills` in Claude Code.
+  Install any way you like: `npx skills add stratalab/strata-agent-skills`,
+  `/plugin marketplace add stratalab/strata-agent-skills` in Claude Code, or
+  `npx strata init` once the package is published (see Status).
 
   Skills are **authored structure + generated substance**: workflow prose is
   written by hand; command tables, error codes, and catalogs are rendered from
@@ -69,7 +74,7 @@ extension's own registration (its F6) — both writers converge on these bytes.
 
 ## Status
 
-`init`, `--check`, `--remove`, the `mcp` passthrough, and the three skills are
+`init`, `--check`, `--remove`, the `mcp` passthrough, and the four skills are
 implemented and tested (including an end-to-end lane: real CLI, real database,
 real MCP handshake through the written entry, skills installed and removed).
 `--check` reports installed-skill freshness against the bundle. Requirements:

@@ -49,7 +49,7 @@ test("e2e: init registers a real database and the MCP entry answers a handshake"
   assert.match(report.handoff, /get started with Strata/);
 
   // Skills land with init (F5) and are byte-identical to the bundle.
-  assert.deepEqual(report.skills.skills, ["strata", "strata-branching", "strata-time-travel"]);
+  assert.deepEqual(report.skills.skills, ["strata", "strata-branching", "strata-python", "strata-time-travel"]);
   for (const name of report.skills.skills) {
     assert.ok(
       existsSync(path.join(root, ".claude", "skills", name, "SKILL.md")),
