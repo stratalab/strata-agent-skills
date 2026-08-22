@@ -9,7 +9,7 @@
     {
       "name": "strata",
       "source": "./",
-      "description": "Use Strata from any agent: core usage, branching patterns, and time travel",
+      "description": "Use Strata from any agent: core usage, branching patterns, time travel, and the Python SDK",
       "version": "0.1.0",
       "category": "database",
       "tags": ["database", "embedded", "branching", "time-travel", "vectors", "mcp"]

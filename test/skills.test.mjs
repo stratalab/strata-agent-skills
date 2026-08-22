@@ -18,7 +18,7 @@ const repoRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const skillsDir = path.join(repoRoot, "skills");
 const pin = readFileSync(path.join(repoRoot, "STRATA_CORE_REV"), "utf8").trim();
 
-const EXPECTED_SKILLS = ["strata", "strata-branching", "strata-time-travel"];
+const EXPECTED_SKILLS = ["strata", "strata-branching", "strata-python", "strata-time-travel"];
 
 // The Agent Skills interchange spec's frontmatter fields — the portable
 // intersection every consumer (Claude Code, claude.ai upload, skills CLI)
@@ -60,7 +60,7 @@ function parseFrontmatter(markdown, label) {
   return { fields, body: lines.slice(end + 1).join("\n") };
 }
 
-test("the committed skill set is exactly the three required skills", () => {
+test("the committed skill set is exactly the required skills", () => {
   const found = readdirSync(skillsDir, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .map((entry) => entry.name)
@@ -138,7 +138,7 @@ test("install → check → tamper → remove round-trip", () => {
 
     assert.deepEqual(
       checkSkills(root).map((skill) => skill.state),
-      ["current", "current", "current"],
+      EXPECTED_SKILLS.map(() => "current"),
     );
 
     writeFileSync(path.join(root, ".claude", "skills", "strata", "SKILL.md"), "tampered");
@@ -149,7 +149,7 @@ test("install → check → tamper → remove round-trip", () => {
     assert.equal(refreshed.action, "refreshed");
     assert.deepEqual(
       checkSkills(root).map((skill) => skill.state),
-      ["current", "current", "current"],
+      EXPECTED_SKILLS.map(() => "current"),
     );
 
     const removed = removeSkills(root);
@@ -157,7 +157,7 @@ test("install → check → tamper → remove round-trip", () => {
     assert.deepEqual(removed.skills, EXPECTED_SKILLS);
     assert.deepEqual(
       checkSkills(root).map((skill) => skill.state),
-      ["missing", "missing", "missing"],
+      EXPECTED_SKILLS.map(() => "missing"),
     );
   } finally {
     rmSync(root, { recursive: true, force: true });
