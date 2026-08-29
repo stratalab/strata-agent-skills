@@ -8,7 +8,7 @@
     its `strata_command` escape hatch, error-code discipline. Ships the full
     command catalog and error registry as references.
   - **`strata-branching`** — branch-per-agent isolation patterns, fork anchors,
-    the no-merge rule.
+    compare → preview → promote.
   - **`strata-time-travel`** — `as_of` reads, history, retention and
     `history_unavailable`.
   - **`strata-python`** — the Python face of the set: `stratadb.open()` and
