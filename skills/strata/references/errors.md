@@ -16,6 +16,9 @@ skill's frontmatter.
 - [`already_exists.engine.graph`](https://stratadb.org/e/already_exists.engine.graph)
 - [`already_exists.engine.json_index`](https://stratadb.org/e/already_exists.engine.json_index)
 
+## conflict
+- [`conflict.engine.promotion`](https://stratadb.org/e/conflict.engine.promotion)
+
 ## failed_precondition
 - [`failed_precondition.engine.graph_negative_weight`](https://stratadb.org/e/failed_precondition.engine.graph_negative_weight)
 - [`failed_precondition.engine.graph_ontology_edge_type`](https://stratadb.org/e/failed_precondition.engine.graph_ontology_edge_type)
@@ -59,6 +62,7 @@ skill's frontmatter.
 - [`invalid_argument.engine.branch_delete`](https://stratadb.org/e/invalid_argument.engine.branch_delete)
 - [`invalid_argument.engine.branch_name`](https://stratadb.org/e/invalid_argument.engine.branch_name)
 - [`invalid_argument.engine.branch_name_reserved`](https://stratadb.org/e/invalid_argument.engine.branch_name_reserved)
+- [`invalid_argument.engine.branch_point`](https://stratadb.org/e/invalid_argument.engine.branch_point)
 - [`invalid_argument.engine.config_key`](https://stratadb.org/e/invalid_argument.engine.config_key)
 - [`invalid_argument.engine.event_batch`](https://stratadb.org/e/invalid_argument.engine.event_batch)
 - [`invalid_argument.engine.event_payload`](https://stratadb.org/e/invalid_argument.engine.event_payload)

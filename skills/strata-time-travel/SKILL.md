@@ -11,7 +11,7 @@ description: >-
   copying data, and event-chain verification.
 license: MIT
 metadata:
-  strata-core-rev: "736f855dfcffc3ccf035d55a124681db95a11e1f"
+  strata-core-rev: "dc825d9ba98b1285563870b1b697b21667bd3fba"
   cli-version-range: "1.x"
 ---
 

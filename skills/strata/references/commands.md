@@ -28,16 +28,19 @@ the Strata IDL at the rev pinned in this skill's frontmatter.
 | [`arrow_export`](https://stratadb.org/docs/arrow/export) | read | Export a product primitive to an Arrow-compatible file. |
 | [`arrow_import`](https://stratadb.org/docs/arrow/import) | write | Import an Arrow-compatible file into a product primitive. |
 
-## branch (7 commands)
+## branch (10 commands)
 | Command | Access | Summary |
 |---|---|---|
 | [`branch_create`](https://stratadb.org/docs/branch/create) | write | Create a new empty root branch. |
 | [`branch_delete`](https://stratadb.org/docs/branch/delete) | write | Delete an active branch and release its storage claims. |
+| [`branch_diff`](https://stratadb.org/docs/branch/diff) | read | Compare two branches and report the entities that differ across every primitive. |
 | [`branch_fork_current`](https://stratadb.org/docs/branch/fork) | write | Fork a new branch from the current head of a source branch. |
 | [`branch_fork_at_timestamp`](https://stratadb.org/docs/branch/fork_at_timestamp) | write | Fork a new branch from a retained source timestamp. |
 | [`branch_fork_at_version`](https://stratadb.org/docs/branch/fork_at_version) | write | Fork a new branch from a retained source commit version. |
 | [`branch_get`](https://stratadb.org/docs/branch/get) | read | Read one branch summary by name. |
 | [`branch_list`](https://stratadb.org/docs/branch/list) | read | List active branches with their lineage facts. |
+| [`branch_merge`](https://stratadb.org/docs/branch/merge) | write | Promote one branch's changes into another as a single atomic commit. |
+| [`branch_preview`](https://stratadb.org/docs/branch/preview) | read | Preview promoting one branch into another, reporting conflicts without mutating either branch. |
 
 ## event (10 commands)
 | Command | Access | Summary |

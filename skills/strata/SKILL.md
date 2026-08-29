@@ -12,7 +12,7 @@ description: >-
   branch/space scoping, and error-code discipline.
 license: MIT
 metadata:
-  strata-core-rev: "736f855dfcffc3ccf035d55a124681db95a11e1f"
+  strata-core-rev: "dc825d9ba98b1285563870b1b697b21667bd3fba"
   cli-version-range: "1.x"
 ---
 
@@ -124,9 +124,9 @@ Notes that save round trips:
 `strata_command` submits one raw wire command, so the entire catalog is
 reachable even though only the common tools are curated. **History
 (`kv_history`, `json_history`, `vector_history`), branch create/delete,
-batches, spaces, arrow import/export, graph analytics, and admin/status
-(`info`) are only reachable this way** — do not conclude a capability is
-missing because there is no
+branch diff/preview/merge (compare and promote), batches, spaces, arrow
+import/export, graph analytics, and admin/status (`info`) are only reachable
+this way** — do not conclude a capability is missing because there is no
 dedicated tool for it.
 
 ```json
@@ -213,7 +213,7 @@ The full public code registry is in
 ## Go deeper
 
 - **`strata-branching`** — branch-per-agent and experiment isolation
-  patterns, fork anchors, the no-merge rule.
+  patterns, fork anchors, compare → preview → promote.
 - **`strata-time-travel`** — `as_of` reads, history commands, retention and
   `history_unavailable`.
 - **`strata_guide`** (tool) — the complete, version-matched usage guide,
