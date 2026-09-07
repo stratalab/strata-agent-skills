@@ -12,7 +12,7 @@ description: >-
   branch/space scoping, and error-code discipline.
 license: MIT
 metadata:
-  strata-core-rev: "dc825d9ba98b1285563870b1b697b21667bd3fba"
+  strata-core-rev: "acff6cb416d3e4320ee4fd3e509e5929c715ff90"
   cli-version-range: "1.x"
 ---
 
@@ -38,7 +38,7 @@ Two meta-tools anchor everything:
 - **`strata_guide`** returns the full usage guide for the exact CLI version
   you are talking to. Call it first when unsure — it is version-matched truth;
   this skill teaches the concepts and the traps.
-- **`strata_command`** runs any command in the catalog (127 commands; the
+- **`strata_command`** runs any command in the catalog (135 commands; the
   curated tools below cover only the common paths). See
   [the escape hatch](#the-escape-hatch-strata_command).
 
@@ -71,14 +71,30 @@ Every mutation returns a commit receipt:
 
 ```json
 { "type": "write_result",
-  "data": { "commit": { "version": 3, "timestamp": 3, "durability": "standard" },
+  "data": { "commit": { "version": 3, "timestamp": 3, "durability": "standard",
+                        "committed_at": 1788756763672897 },
              "effect": { "applied": true, "kind": "created" } } }
 ```
 
-Save `data.commit.timestamp` when you may need to look back. Read tools that
-accept `as_of` replay the database as of that commit timestamp. Timestamps
-come from receipts and history rows — never compute them from wall-clock
-time. The `strata-time-travel` skill covers this in depth.
+Two different clocks sit in that receipt, and confusing them is the classic
+mistake:
+
+- **`timestamp`** (and `version`) is a position on the database's own commit
+  timeline — a counter that starts near 1. It is **not** microseconds and never
+  a date. Save it when you may need to look back, and pass it to a read's
+  `as_of`. Values come from receipts and history rows; never compute one.
+- **`committed_at`** is the real UTC instant the commit was applied, in epoch
+  microseconds — the field to format as a date. It is `null` on commits written
+  before engine 1.2.1 or replayed from an import. Reads take it as `as_of_time`,
+  and it is the one you *may* compute.
+
+The curated tools below take `as_of` only; a wall-clock read goes through
+`strata_command` (`{"command": {"type": "kv_get", "key": "…", "as_of_time":
+1788756763672897}}`). Supplying both clocks in one call is
+`invalid_argument.executor.as_of_conflict`. The `strata-time-travel` skill
+covers all of this in depth — including the edge that bites first: an
+`as_of_time` outside the branch's dated history is refused, not clamped, so
+"now" is an error, not "latest".
 
 ## MCP tools
 
@@ -123,11 +139,12 @@ Notes that save round trips:
 
 `strata_command` submits one raw wire command, so the entire catalog is
 reachable even though only the common tools are curated. **History
-(`kv_history`, `json_history`, `vector_history`), branch create/delete,
-branch diff/preview/merge (compare and promote), batches, spaces, arrow
-import/export, graph analytics, and admin/status (`info`) are only reachable
-this way** — do not conclude a capability is missing because there is no
-dedicated tool for it.
+(`kv_history`, `json_history`, `vector_history`), wall-clock reads
+(`as_of_time`), branch create/delete, branch diff/preview/merge (compare and
+promote), batches, spaces, arrow import/export, graph analytics, StrataHub
+browse and clone (`hub_list_datasets`, `hub_get_dataset`, `hub_clone`), and
+admin/status (`info`) are only reachable this way** — do not conclude a
+capability is missing because there is no dedicated tool for it.
 
 ```json
 { "command": { "type": "kv_history", "key": "bm90ZXM=" } }
@@ -203,12 +220,15 @@ Codes you will actually meet:
 | `already_exists.engine.branch` | the branch name for a create/fork is already taken |
 | `history_unavailable.engine.persistence_history` | `as_of`, history, or a fork anchor points outside retained history — pick a newer timestamp |
 | `invalid_argument.engine.kv_key` | the key is invalid (for example, empty) |
+| `invalid_argument.executor.as_of_conflict` | `as_of` and `as_of_time` were both supplied — pick one clock |
 | `access_denied.executor.read_only_session` | this session is read-only and the command writes — reconnect writable |
 | `failed_precondition.engine.runtime_closed` | the database handle is closed or shutting down — reconnect |
 <!-- generated:end representative-errors -->
 
-The full public code registry is in
-[references/errors.md](references/errors.md).
+The codes commands declare are in
+[references/errors.md](references/errors.md) — read its header for the
+classes that live outside that list (`corruption`, `data_loss`,
+`ambiguous_commit`), which are terminal: stop and report, never retry.
 
 ## Go deeper
 

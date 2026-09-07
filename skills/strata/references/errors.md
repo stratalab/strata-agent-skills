@@ -1,11 +1,29 @@
 # Strata public error codes
 
-Every public error code, grouped by class. Codes are stable
+The codes **commands declare**, grouped by class. Codes are stable
 `class.area.detail` identifiers — branch on them and on the envelope's
 `retryable` / `retry_policy` / `suggested_fix` fields, never on message
 text. Each code has a reference page at `https://stratadb.org/e/<code>`.
 This file is generated from the Strata IDL at the rev pinned in this
 skill's frontmatter.
+
+**This list is not the whole registry.** It covers what the catalog's
+commands declare they can return; the engine also defines classes that no
+command declares up front, and you can still receive one:
+
+- **`corruption.*`** — on-disk data failed an integrity check.
+- **`data_loss.*`** — durable state that should exist cannot be
+  reconstructed; unrecoverable rather than merely inconsistent (class added
+  in engine 1.2.0, where these codes previously reported `corruption`).
+- **`ambiguous_commit.*`** — a write whose commit outcome is unknown; inspect
+  state before retrying.
+- **`io.*`**, **`serialization.*`**, **`internal.*`** — the residual classes.
+
+Treat a `corruption` or `data_loss` code as terminal: stop, do not retry, and
+report it — the envelope's `retryable` is `false` and no amount of repeating
+the request changes the answer. The complete registry, with each code's class,
+retry policy and hint, is `strata agents errors` from the CLI (and the
+per-code pages above).
 
 <!-- generated:begin error-catalog -->
 ## access_denied
@@ -116,20 +134,23 @@ skill's frontmatter.
 - [`invalid_argument.executor.arrow_collection`](https://stratadb.org/e/invalid_argument.executor.arrow_collection)
 - [`invalid_argument.executor.arrow_embedding_type`](https://stratadb.org/e/invalid_argument.executor.arrow_embedding_type)
 - [`invalid_argument.executor.arrow_empty_export`](https://stratadb.org/e/invalid_argument.executor.arrow_empty_export)
+- [`invalid_argument.executor.arrow_encoding`](https://stratadb.org/e/invalid_argument.executor.arrow_encoding)
 - [`invalid_argument.executor.arrow_event`](https://stratadb.org/e/invalid_argument.executor.arrow_event)
-- [`invalid_argument.executor.arrow_feature_disabled`](https://stratadb.org/e/invalid_argument.executor.arrow_feature_disabled)
 - [`invalid_argument.executor.arrow_format`](https://stratadb.org/e/invalid_argument.executor.arrow_format)
 - [`invalid_argument.executor.arrow_graph`](https://stratadb.org/e/invalid_argument.executor.arrow_graph)
 - [`invalid_argument.executor.arrow_input_missing`](https://stratadb.org/e/invalid_argument.executor.arrow_input_missing)
 - [`invalid_argument.executor.arrow_json_key`](https://stratadb.org/e/invalid_argument.executor.arrow_json_key)
 - [`invalid_argument.executor.arrow_key_column`](https://stratadb.org/e/invalid_argument.executor.arrow_key_column)
+- [`invalid_argument.executor.arrow_non_finite_float`](https://stratadb.org/e/invalid_argument.executor.arrow_non_finite_float)
 - [`invalid_argument.executor.arrow_value_column`](https://stratadb.org/e/invalid_argument.executor.arrow_value_column)
 - [`invalid_argument.executor.arrow_vector_dimension`](https://stratadb.org/e/invalid_argument.executor.arrow_vector_dimension)
 - [`invalid_argument.executor.arrow_vector_key`](https://stratadb.org/e/invalid_argument.executor.arrow_vector_key)
+- [`invalid_argument.executor.as_of_conflict`](https://stratadb.org/e/invalid_argument.executor.as_of_conflict)
 - [`invalid_argument.executor.graph_analytics_budget`](https://stratadb.org/e/invalid_argument.executor.graph_analytics_budget)
 - [`invalid_argument.executor.hub_branch`](https://stratadb.org/e/invalid_argument.executor.hub_branch)
 - [`invalid_argument.executor.hub_dataset`](https://stratadb.org/e/invalid_argument.executor.hub_dataset)
-- [`invalid_argument.executor.hub_feature_disabled`](https://stratadb.org/e/invalid_argument.executor.hub_feature_disabled)
+- [`invalid_argument.executor.hub_filter`](https://stratadb.org/e/invalid_argument.executor.hub_filter)
+- [`invalid_argument.executor.hub_since`](https://stratadb.org/e/invalid_argument.executor.hub_since)
 - [`invalid_argument.executor.hub_url`](https://stratadb.org/e/invalid_argument.executor.hub_url)
 - [`invalid_argument.executor.ipc_hello`](https://stratadb.org/e/invalid_argument.executor.ipc_hello)
 - [`invalid_argument.executor.json_batch_duplicate_key`](https://stratadb.org/e/invalid_argument.executor.json_batch_duplicate_key)
@@ -146,6 +167,8 @@ skill's frontmatter.
 - [`not_found.engine.graph`](https://stratadb.org/e/not_found.engine.graph)
 - [`not_found.engine.graph_node`](https://stratadb.org/e/not_found.engine.graph_node)
 - [`not_found.engine.vector_collection`](https://stratadb.org/e/not_found.engine.vector_collection)
+- [`not_found.executor.hub_dataset`](https://stratadb.org/e/not_found.executor.hub_dataset)
+- [`not_found.executor.hub_resource`](https://stratadb.org/e/not_found.executor.hub_resource)
 
 ## resource_exhausted
 - [`resource_exhausted.engine.graph_analytics_budget`](https://stratadb.org/e/resource_exhausted.engine.graph_analytics_budget)
@@ -159,4 +182,6 @@ skill's frontmatter.
 
 ## unsupported
 - [`unsupported.engine.graph_binding_cross_branch`](https://stratadb.org/e/unsupported.engine.graph_binding_cross_branch)
+- [`unsupported.executor.arrow_feature_disabled`](https://stratadb.org/e/unsupported.executor.arrow_feature_disabled)
+- [`unsupported.executor.hub_feature_disabled`](https://stratadb.org/e/unsupported.executor.hub_feature_disabled)
 <!-- generated:end error-catalog -->

@@ -14,7 +14,7 @@ description: >-
   codes.
 license: MIT
 metadata:
-  strata-core-rev: "dc825d9ba98b1285563870b1b697b21667bd3fba"
+  strata-core-rev: "acff6cb416d3e4320ee4fd3e509e5929c715ff90"
   cli-version-range: "1.x"
 ---
 
@@ -85,6 +85,12 @@ input error. Fork anchors must lie within retained history — outside it you
 get `history_unavailable.engine.persistence_history` (see
 `strata-time-travel`).
 
+**Anchors take the commit clock only.** Reads gained a wall-clock argument
+(`as_of_time`) in engine 1.2.1, but `branch_fork_at_timestamp` did not: its
+`timestamp` is a commit timestamp, not epoch microseconds. To fork at a real
+moment, read `kv_history`/`json_history` first, pick the row whose
+`committed_at` you want, and fork at *that row's* `timestamp`.
+
 Branch names are validated (`invalid_argument.engine.branch_name`); stick to
 short lowercase ASCII names like `agent-7` or `exp-cache` unless told
 otherwise.
@@ -104,7 +110,8 @@ tools; send them through `strata_command`:
   only on A, `modified` on both with different values — grouped per space and
   capability (`key_value`, `json`, `vector`, `vector_collection`, `event`,
   `graph_metadata`, `graph_node`, `graph_edge`, `graph_ontology`). Pass
-  `at_timestamp` to compare both branches as of a past commit.
+  `at_timestamp` to compare both branches as of a past commit — a commit
+  timestamp, again, not a wall-clock instant (upstream: strata-core#3186).
 - **Preview and merge need shared fork lineage.** The branch point comes from
   the recorded fork, so promote a fork into the branch it came from. Branches
   with no shared lineage — a `branch_create` root, for instance — are rejected
