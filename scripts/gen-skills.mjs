@@ -52,6 +52,7 @@ const REPRESENTATIVE_ERRORS = [
   ["already_exists.engine.branch", "the branch name for a create/fork is already taken"],
   ["history_unavailable.engine.persistence_history", "`as_of`, history, or a fork anchor points outside retained history — pick a newer timestamp"],
   ["invalid_argument.engine.kv_key", "the key is invalid (for example, empty)"],
+  ["invalid_argument.executor.as_of_conflict", "`as_of` and `as_of_time` were both supplied — pick one clock"],
   ["access_denied.executor.read_only_session", "this session is read-only and the command writes — reconnect writable"],
   ["failed_precondition.engine.runtime_closed", "the database handle is closed or shutting down — reconnect"],
 ];
@@ -126,6 +127,7 @@ for (const command of commands) {
   if (typeof wireType !== "string") fail(`${command.id}: no request type const in schema`);
   command.wireType = wireType;
   command.takesAsOf = Object.prototype.hasOwnProperty.call(properties, "as_of");
+  command.takesAsOfTime = Object.prototype.hasOwnProperty.call(properties, "as_of_time");
 }
 
 const byId = new Map(commands.map((command) => [command.id, command]));
@@ -167,6 +169,38 @@ const errorCodeSet = new Set(errorCodes);
 
 for (const [code] of REPRESENTATIVE_ERRORS) {
   if (!errorCodeSet.has(code)) fail(`representative error ${code} is not in errors.yaml`);
+}
+
+// The skills tell agents that wall-clock reads (`as_of_time`) are reachable
+// only through `strata_command`, because the curated MCP tools take `as_of`
+// alone. That is an authored claim about upstream, so hold it to the source:
+// when mcp.rs learns as_of_time, generation fails and the prose gets revisited
+// rather than quietly becoming wrong.
+{
+  const mcpSource = fs
+    .readFileSync(path.join(strataCore, "crates", "cli", "src", "mcp.rs"), "utf8")
+    .split("#[cfg(test)]")[0];
+  if (mcpSource.includes("as_of_time")) {
+    fail(
+      "crates/cli/src/mcp.rs now mentions as_of_time — the curated MCP tools may\n" +
+        "  expose the wall clock directly. Update the `strata_command`-only wording in\n" +
+        "  skills/strata/SKILL.md and skills/strata-time-travel/SKILL.md, then remove\n" +
+        "  this guard or narrow it.",
+    );
+  }
+}
+
+// The strata skill states the catalog size in authored prose ("N commands").
+// It drifted from 127 to 135 across three engine releases before anyone noticed.
+{
+  const skill = fs.readFileSync(path.join(repoRoot, "skills/strata/SKILL.md"), "utf8");
+  const stated = skill.match(/\((\d+) commands;/);
+  if (stated === null) fail("skills/strata/SKILL.md no longer states the catalog size");
+  if (Number(stated[1]) !== commands.length) {
+    fail(
+      `skills/strata/SKILL.md says ${stated[1]} commands, the catalog has ${commands.length}`,
+    );
+  }
 }
 
 // ---- renderers --------------------------------------------------------------
@@ -259,16 +293,35 @@ function renderBranchErrors() {
 }
 
 function renderAsOfCommands() {
-  const takers = commands.filter((command) => command.takesAsOf);
+  const takers = commands.filter((command) => command.takesAsOf || command.takesAsOfTime);
   const families = [...new Set(takers.map((command) => command.family))].sort();
-  return families
-    .map((family) => {
-      const names = takers
-        .filter((command) => command.family === family)
-        .map((command) => `\`${command.wireType}\``);
-      return `- **${family}** — ${names.join(", ")}`;
-    })
-    .join("\n");
+  const lines = families.map((family) => {
+    const names = takers
+      .filter((command) => command.family === family)
+      .map((command) => `\`${command.wireType}\``);
+    return `- **${family}** — ${names.join(", ")}`;
+  });
+  // The two clocks landed together on the same set (strata-core #3112). Say so
+  // while it holds, and name the exceptions the moment upstream diverges —
+  // an agent must never be told a command takes a clock it does not.
+  const asOfOnly = takers.filter((command) => !command.takesAsOfTime);
+  const timeOnly = takers.filter((command) => !command.takesAsOf);
+  lines.push("");
+  if (asOfOnly.length === 0 && timeOnly.length === 0) {
+    lines.push(
+      `All ${takers.length} accept **both** \`as_of\` (commit timeline) and ` +
+        "`as_of_time` (wall clock) — one or the other, never both in one call.",
+    );
+  } else {
+    lines.push("Both clocks, except:");
+    if (asOfOnly.length > 0) {
+      lines.push(`- \`as_of\` only: ${asOfOnly.map((c) => `\`${c.wireType}\``).join(", ")}`);
+    }
+    if (timeOnly.length > 0) {
+      lines.push(`- \`as_of_time\` only: ${timeOnly.map((c) => `\`${c.wireType}\``).join(", ")}`);
+    }
+  }
+  return lines.join("\n");
 }
 
 function renderHistoryCommands() {

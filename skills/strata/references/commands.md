@@ -91,6 +91,15 @@ the Strata IDL at the rev pinned in this skill's frontmatter.
 | [`graph_ontology_summary`](https://stratadb.org/docs/graph/ontology/summary) | read | Read the ontology with usage counts. |
 | [`graph_sample`](https://stratadb.org/docs/graph/sample) | read | Sample graph nodes. |
 
+## hub (5 commands)
+| Command | Access | Summary |
+|---|---|---|
+| [`hub_get_dataset`](https://stratadb.org/docs/hub/get_dataset) | read | Read one StrataHub dataset card. |
+| [`hub_info`](https://stratadb.org/docs/hub/info) | read | Read the selected StrataHub's V1 capability advertisement. |
+| [`hub_list_datasets`](https://stratadb.org/docs/hub/list_datasets) | read | List datasets from the selected StrataHub. |
+| [`hub_list_refs`](https://stratadb.org/docs/hub/list_refs) | read | List live refs for a StrataHub dataset. |
+| [`hub_list_yanked`](https://stratadb.org/docs/hub/list_yanked) | read | List yanked refs from the selected StrataHub. |
+
 ## inference (11 commands)
 | Command | Access | Summary |
 |---|---|---|
