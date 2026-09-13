@@ -12,7 +12,7 @@ description: >-
   branch/space scoping, and error-code discipline.
 license: MIT
 metadata:
-  strata-core-rev: "acff6cb416d3e4320ee4fd3e509e5929c715ff90"
+  strata-core-rev: "2a48581b091cfe232d469fd106de0d0fbd9d04f9"
   cli-version-range: "1.x"
 ---
 
@@ -38,7 +38,7 @@ Two meta-tools anchor everything:
 - **`strata_guide`** returns the full usage guide for the exact CLI version
   you are talking to. Call it first when unsure — it is version-matched truth;
   this skill teaches the concepts and the traps.
-- **`strata_command`** runs any command in the catalog (135 commands; the
+- **`strata_command`** runs any command in the catalog (137 commands; the
   curated tools below cover only the common paths). See
   [the escape hatch](#the-escape-hatch-strata_command).
 
@@ -59,7 +59,7 @@ spread one record across primitives without a reason.
 | Config, flags, checkpoints, small state blobs | **KV** | Simplest shape; versioned history per key |
 | Structured records you update field by field | **JSON** | Path-level reads and writes (`$.user.name`), indexes |
 | Things that happened — decisions, tool calls, audit trail | **Events** | Append-only, hash-chained, integrity-verifiable |
-| Text/embeddings you retrieve by similarity | **Vectors** | Collections with k-NN query and metadata filters |
+| Text/embeddings you retrieve by similarity | **Vectors** | Collections with k-NN query and metadata filters; a collection can declare an embedding model and take text directly |
 | Entities and relationships you traverse | **Graph** | Typed nodes/edges, neighbors, analytics |
 
 A useful default for agent memory: JSON for the working record, Events for
@@ -149,6 +149,15 @@ capability is missing because there is no dedicated tool for it.
 ```json
 { "command": { "type": "kv_history", "key": "bm90ZXM=" } }
 ```
+
+Since engine 1.2.2 a vector collection can declare the model its vectors come
+from (`vector_create_collection` with `embedding_model`, or
+`vector_set_embedding_model` afterwards), and then `vector_upsert` /
+`vector_query` accept `text` where the vector would go — the engine embeds it.
+Pass one or the other, never both. Without a declared model, `text` is
+`failed_precondition.engine.embedding_model_missing`; `inference_status` reports
+up front whether this build can run local models and which provider keys are
+present, which is the cheapest way to answer "why did that fail".
 
 The wire speaks base64 for KV keys and values — `"bm90ZXM="` is `"notes"`.
 Text convenience exists only in the curated KV tools; through

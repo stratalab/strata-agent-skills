@@ -15,7 +15,7 @@ description: >-
   matched on .code, db.ai inference, and the sharp edges that trip agents.
 license: MIT
 metadata:
-  strata-core-rev: "acff6cb416d3e4320ee4fd3e509e5929c715ff90"
+  strata-core-rev: "2a48581b091cfe232d469fd106de0d0fbd9d04f9"
   cli-version-range: "1.x"
   stratadb-version-range: "1.x"
 ---
@@ -70,13 +70,13 @@ One namespace per primitive, plus the control plane and the escape hatch:
 |---|---|---|
 | `db.kv` | opaque values by key (`str`/`bytes` in, `bytes` out) | `put`, `get`, `exists`, `delete`, `put_many`, `get_many`, `keys(prefix=)`, `history` |
 | `db.json` | structured documents, addressed by path | `set(key, "$", doc)`, `get(key, "$.field")`, `set_many`, `keys(prefix=)`, `scan`, `history` |
-| `db.vectors` | embeddings + metadata, similarity search | `create_collection(name, dimension=, metric=)`, `upsert`, `query(coll, vec, k=, filter=)`, `keys`, `history` |
+| `db.vectors` | embeddings + metadata, similarity search | `create_collection(name, dimension=, metric=, embedding_model=)`, `upsert(coll, key, vec \| text=)`, `query(coll, vec \| text=, k=, filter=)`, `set_embedding_model`, `keys`, `history` |
 | `db.events` | append-only, hash-chained log | `append(type, payload)`, `get(seq)`, `range(start=)`, `range_by_time`, `len()`, `verify_chain()` |
 | `db.graphs` | typed nodes and edges, traversal, analytics | `create`, `add_node`, `add_edge`, `neighbors`, `list_nodes`, graph analytics (PageRank, BFS, …) |
 | `db.branches`, `db.spaces`, `db.at(...)` | isolation and scoping | `fork`, `create`, `list`, `fork_at_version`, `fork_at_timestamp`; `db.at(branch=, space=)` |
 | `db.admin`, `db.arrow` | control plane; bulk Arrow/Parquet | `ping`, `info`, `health`, `ipc_status`; `export`, `import_` |
 | `db.hub` | browse StrataHub (read-only; never touches your data) | `info`, `list_datasets(tasks=, tags=, sort=)`, `get_dataset`, `list_refs`, `list_yanked`; `stratadb.clone(name, dest)` downloads one |
-| `db.ai` | inference, OpenAI-shaped | `chat`, `embed`, `rank`, `capability` |
+| `db.ai` | inference, OpenAI-shaped | `chat`, `embed`, `rank`, `capability`, `status` |
 | `db.execute({...})` | the raw wire — every cataloged command | `stratadb.command_index()` lists them |
 
 ```python
@@ -85,6 +85,9 @@ db.json.set("user:1", "$", {"name": "Ada"});  db.json.get("user:1", "$.name")  #
 db.vectors.create_collection("notes", dimension=3, metric="cosine")
 db.vectors.upsert("notes", "n1", [0.1, 0.2, 0.3], metadata={"kind": "note"})
 db.vectors.query("notes", [0.1, 0.2, 0.3], k=5)                               # list[VectorMatch]
+db.vectors.create_collection("docs", dimension=384, embedding_model="miniLM")  # stratadb >= 1.2.2
+db.vectors.upsert("docs", "d1", text="a small domestic cat")                  # engine embeds it
+db.vectors.query("docs", text="kitten", k=5)                                  # and on the way in
 db.events.append("deploy", {"ok": True});  db.events.len()                    # 1
 db.graphs.create("g"); db.graphs.add_node("g", "a"); db.graphs.add_node("g", "b")
 db.graphs.add_edge("g", "a", "link", "b")                                     # both endpoints must exist
@@ -230,6 +233,15 @@ Codes you will actually meet:
   them. Use `durability="always"` when every acknowledgement must survive.
 - **Graph edges need both endpoints first.** `add_edge` to a missing node
   raises `invalid_argument.engine.graph_edge_endpoint`.
+- **`text=` needs a declared model.** `db.vectors.upsert(...,  text=)` and
+  `query(..., text=)` embed through the collection's `embedding_model`
+  (`create_collection(embedding_model=)` or `set_embedding_model()`); without
+  one it is `failed_precondition.engine.embedding_model_missing`, and a model
+  whose dimension disagrees with the collection is
+  `embedding_model_mismatch`. Pass a vector or `text=`, never both. The
+  embedding is a real inference call, so it carries the `inference.*` failures
+  — `db.ai.status()` tells you up front whether this build runs local models
+  and which provider keys are present.
 - **Cloud `db.ai` needs your key** (`OPENAI_API_KEY` / `ANTHROPIC_API_KEY` /
   `GOOGLE_API_KEY`, or `strata config set <provider>.api_key …`); Strata ships
   none, and there is no bundled offline embedder yet — for keyless vector

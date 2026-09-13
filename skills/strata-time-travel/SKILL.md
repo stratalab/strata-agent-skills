@@ -13,7 +13,7 @@ description: >-
   copying data, and event-chain verification.
 license: MIT
 metadata:
-  strata-core-rev: "acff6cb416d3e4320ee4fd3e509e5929c715ff90"
+  strata-core-rev: "2a48581b091cfe232d469fd106de0d0fbd9d04f9"
   cli-version-range: "1.x"
 ---
 
@@ -94,6 +94,14 @@ including tombstones (deletions):
 
 `committed_at` is what you show a human ("changed 2026-09-06 14:05"); the
 `timestamp` beside it is what you send back to `as_of`.
+
+An as-of **JSON** read carries that metadata too, since engine 1.2.2:
+`json_get` answered a bare `json_value` for a historical read and a
+`json_versioned_value` for a live one — one command, two shapes, and the
+historical half dropped the version it exists to report. Both now answer
+`json_versioned_value`. (Mixed versions are the one place this bites: a 1.2.2
+client cannot read an as-of JSON answer from a 1.2.1 server, and IPC does not
+refuse the pairing — strata-core#3369.)
 
 A key with no history is an ordinary miss (empty/absent result), not an
 error. From MCP these commands go through `strata_command` with wire base64

@@ -38,6 +38,8 @@ per-code pages above).
 - [`conflict.engine.promotion`](https://stratadb.org/e/conflict.engine.promotion)
 
 ## failed_precondition
+- [`failed_precondition.engine.embedding_model_mismatch`](https://stratadb.org/e/failed_precondition.engine.embedding_model_mismatch)
+- [`failed_precondition.engine.embedding_model_missing`](https://stratadb.org/e/failed_precondition.engine.embedding_model_missing)
 - [`failed_precondition.engine.graph_negative_weight`](https://stratadb.org/e/failed_precondition.engine.graph_negative_weight)
 - [`failed_precondition.engine.graph_ontology_edge_type`](https://stratadb.org/e/failed_precondition.engine.graph_ontology_edge_type)
 - [`failed_precondition.engine.graph_ontology_endpoint_type`](https://stratadb.org/e/failed_precondition.engine.graph_ontology_endpoint_type)
@@ -64,10 +66,13 @@ per-code pages above).
 - [`inference.model_load_failed`](https://stratadb.org/e/inference.model_load_failed)
 - [`inference.provider_auth_failed`](https://stratadb.org/e/inference.provider_auth_failed)
 - [`inference.provider_malformed_response`](https://stratadb.org/e/inference.provider_malformed_response)
+- [`inference.provider_model_not_found`](https://stratadb.org/e/inference.provider_model_not_found)
+- [`inference.provider_quota_exhausted`](https://stratadb.org/e/inference.provider_quota_exhausted)
 - [`inference.provider_rate_limited`](https://stratadb.org/e/inference.provider_rate_limited)
 - [`inference.provider_timeout`](https://stratadb.org/e/inference.provider_timeout)
 - [`inference.provider_unavailable`](https://stratadb.org/e/inference.provider_unavailable)
 - [`inference.registry_corrupt`](https://stratadb.org/e/inference.registry_corrupt)
+- [`inference.unknown_model`](https://stratadb.org/e/inference.unknown_model)
 - [`inference.unsupported_operation`](https://stratadb.org/e/inference.unsupported_operation)
 - [`inference.unsupported_parameter`](https://stratadb.org/e/inference.unsupported_parameter)
 - [`inference.unsupported_provider`](https://stratadb.org/e/inference.unsupported_provider)
@@ -82,6 +87,7 @@ per-code pages above).
 - [`invalid_argument.engine.branch_name_reserved`](https://stratadb.org/e/invalid_argument.engine.branch_name_reserved)
 - [`invalid_argument.engine.branch_point`](https://stratadb.org/e/invalid_argument.engine.branch_point)
 - [`invalid_argument.engine.config_key`](https://stratadb.org/e/invalid_argument.engine.config_key)
+- [`invalid_argument.engine.embedding_model`](https://stratadb.org/e/invalid_argument.engine.embedding_model)
 - [`invalid_argument.engine.event_batch`](https://stratadb.org/e/invalid_argument.engine.event_batch)
 - [`invalid_argument.engine.event_payload`](https://stratadb.org/e/invalid_argument.engine.event_payload)
 - [`invalid_argument.engine.event_payload_too_large`](https://stratadb.org/e/invalid_argument.engine.event_payload_too_large)
@@ -159,6 +165,7 @@ per-code pages above).
 - [`invalid_argument.executor.limit`](https://stratadb.org/e/invalid_argument.executor.limit)
 - [`invalid_argument.executor.vector_batch_duplicate_key`](https://stratadb.org/e/invalid_argument.executor.vector_batch_duplicate_key)
 - [`invalid_argument.executor.vector_dimension`](https://stratadb.org/e/invalid_argument.executor.vector_dimension)
+- [`invalid_argument.executor.vector_input`](https://stratadb.org/e/invalid_argument.executor.vector_input)
 - [`invalid_argument.executor.vector_limit`](https://stratadb.org/e/invalid_argument.executor.vector_limit)
 - [`invalid_argument.executor.wire_request`](https://stratadb.org/e/invalid_argument.executor.wire_request)
 
