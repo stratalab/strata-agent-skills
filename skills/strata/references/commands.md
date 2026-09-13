@@ -100,7 +100,7 @@ the Strata IDL at the rev pinned in this skill's frontmatter.
 | [`hub_list_refs`](https://stratadb.org/docs/hub/list_refs) | read | List live refs for a StrataHub dataset. |
 | [`hub_list_yanked`](https://stratadb.org/docs/hub/list_yanked) | read | List yanked refs from the selected StrataHub. |
 
-## inference (11 commands)
+## inference (12 commands)
 | Command | Access | Summary |
 |---|---|---|
 | [`inference_cache_status`](https://stratadb.org/docs/inference/cache_status) | read | Report loaded model cache state. |
@@ -112,6 +112,7 @@ the Strata IDL at the rev pinned in this skill's frontmatter.
 | [`inference_models_local`](https://stratadb.org/docs/inference/models/local) | read | List locally downloaded inference models. |
 | [`inference_models_pull`](https://stratadb.org/docs/inference/models/pull) | read | Download an inference model locally. |
 | [`inference_rank`](https://stratadb.org/docs/inference/rank) | read | Rank passages against a query. |
+| [`inference_status`](https://stratadb.org/docs/inference/status) | read | Report what this binary can do before anything is attempted. |
 | [`inference_tokenize`](https://stratadb.org/docs/inference/tokenize) | read | Tokenize text with a local model. |
 | [`inference_unload`](https://stratadb.org/docs/inference/unload) | read | Unload cached inference models. |
 
@@ -160,16 +161,17 @@ the Strata IDL at the rev pinned in this skill's frontmatter.
 | [`space_exists`](https://stratadb.org/docs/space/exists) | read | Check whether a product space exists on a branch. |
 | [`space_list`](https://stratadb.org/docs/space/list) | read | List product spaces on a branch. |
 
-## vector (22 commands)
+## vector (23 commands)
 | Command | Access | Summary |
 |---|---|---|
 | [`vector_batch_delete`](https://stratadb.org/docs/vector/batch_delete) | write | Delete multiple vectors by key. |
 | [`vector_batch_exists`](https://stratadb.org/docs/vector/batch_exists) | read | Check existence for multiple vector keys. |
 | [`vector_batch_get`](https://stratadb.org/docs/vector/batch_get) | read | Read multiple vectors by key. |
 | [`vector_batch_upsert`](https://stratadb.org/docs/vector/batch_upsert) | write | Upsert multiple vectors in one itemwise batch. |
-| [`vector_create_collection`](https://stratadb.org/docs/vector/collection/create) | write | Create a vector collection with a dimension and metric. |
+| [`vector_create_collection`](https://stratadb.org/docs/vector/collection/create) | write | Create a vector collection with a dimension, metric, and optionally the model that produces its vectors. |
 | [`vector_delete_collection`](https://stratadb.org/docs/vector/collection/delete) | write | Delete a vector collection. |
 | [`vector_list_collections`](https://stratadb.org/docs/vector/collection/list) | read | List vector collections. |
+| [`vector_set_embedding_model`](https://stratadb.org/docs/vector/collection/set_embedding_model) | write | Declare the embedding model a vector collection's vectors come from. |
 | [`vector_collection_stats`](https://stratadb.org/docs/vector/collection/stats) | read | Read facts for one vector collection. |
 | [`vector_count`](https://stratadb.org/docs/vector/count) | read | Count visible vectors in a collection. |
 | [`vector_delete`](https://stratadb.org/docs/vector/delete) | write | Delete one vector key. |

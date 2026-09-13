@@ -14,7 +14,7 @@ description: >-
   codes.
 license: MIT
 metadata:
-  strata-core-rev: "acff6cb416d3e4320ee4fd3e509e5929c715ff90"
+  strata-core-rev: "2a48581b091cfe232d469fd106de0d0fbd9d04f9"
   cli-version-range: "1.x"
 ---
 
@@ -108,7 +108,8 @@ tools; send them through `strata_command`:
 
 - **Diff is directional, A → B.** `added` entries exist only on B, `removed`
   only on A, `modified` on both with different values — grouped per space and
-  capability (`key_value`, `json`, `vector`, `vector_collection`, `event`,
+  capability (`kv` — spelled `key_value` before engine 1.2.2 — `json`,
+  `vector`, `vector_collection`, `event`,
   `graph_metadata`, `graph_node`, `graph_edge`, `graph_ontology`). Pass
   `at_timestamp` to compare both branches as of a past commit — a commit
   timestamp, again, not a wall-clock instant (upstream: strata-core#3186).
