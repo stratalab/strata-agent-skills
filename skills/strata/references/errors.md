@@ -38,6 +38,7 @@ per-code pages above).
 - [`conflict.engine.promotion`](https://stratadb.org/e/conflict.engine.promotion)
 
 ## failed_precondition
+- [`failed_precondition.engine.branch_has_children`](https://stratadb.org/e/failed_precondition.engine.branch_has_children)
 - [`failed_precondition.engine.embedding_model_mismatch`](https://stratadb.org/e/failed_precondition.engine.embedding_model_mismatch)
 - [`failed_precondition.engine.embedding_model_missing`](https://stratadb.org/e/failed_precondition.engine.embedding_model_missing)
 - [`failed_precondition.engine.graph_negative_weight`](https://stratadb.org/e/failed_precondition.engine.graph_negative_weight)
@@ -49,6 +50,7 @@ per-code pages above).
 - [`failed_precondition.engine.graph_ontology_required_property`](https://stratadb.org/e/failed_precondition.engine.graph_ontology_required_property)
 - [`failed_precondition.engine.runtime_closed`](https://stratadb.org/e/failed_precondition.engine.runtime_closed)
 - [`failed_precondition.engine.space_not_empty`](https://stratadb.org/e/failed_precondition.engine.space_not_empty)
+- [`failed_precondition.engine.writer_lock`](https://stratadb.org/e/failed_precondition.engine.writer_lock)
 - [`failed_precondition.executor.hub_clone`](https://stratadb.org/e/failed_precondition.executor.hub_clone)
 
 ## history_unavailable
