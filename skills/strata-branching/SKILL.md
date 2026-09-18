@@ -14,7 +14,7 @@ description: >-
   codes.
 license: MIT
 metadata:
-  strata-core-rev: "2a48581b091cfe232d469fd106de0d0fbd9d04f9"
+  strata-core-rev: "6fc481c33473efd7d1724284107b67be08625dcd"
   cli-version-range: "1.x"
 ---
 
@@ -44,7 +44,10 @@ not data. The default branch is named `default` (not `main`).
 3. **A new branch is empty or a fork.** `branch_create` makes an empty root
    branch sharing no history. Forks start from a source branch at its head, a
    version, or a timestamp.
-4. **The `default` branch cannot be deleted.**
+4. **The `default` branch cannot be deleted**, and neither is a branch another
+   branch was forked from while that fork lives —
+   `failed_precondition.engine.branch_has_children` (engine 1.2.3; it used to
+   read as a retry-later failure). Delete the children first.
 
 ## Patterns
 

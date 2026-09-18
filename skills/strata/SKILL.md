@@ -12,7 +12,7 @@ description: >-
   branch/space scoping, and error-code discipline.
 license: MIT
 metadata:
-  strata-core-rev: "2a48581b091cfe232d469fd106de0d0fbd9d04f9"
+  strata-core-rev: "6fc481c33473efd7d1724284107b67be08625dcd"
   cli-version-range: "1.x"
 ---
 
@@ -217,7 +217,12 @@ Failure is always a structured status:
 The discipline: **branch on `code` (stable, `class.area.detail` format) and
 the envelope fields (`retryable`, `retry_policy`, `suggested_fix`) — never on
 message text.** The envelope is the recovery plan: if `retryable` is false,
-change the request instead of repeating it. Every code has a reference page
+change the request instead of repeating it. `retryable: true` is not
+permission to loop — read `retry_policy`: `same_request` means repeating it
+may work, `idempotent_only` means only if the command is safe to repeat, and
+`after_state_change` means the answer changes only when something else does
+(resolve the conflict, close the other handle, wait for retention), so a
+blind retry spins forever. Every code has a reference page
 at `https://stratadb.org/e/<code>`.
 
 Codes you will actually meet:
