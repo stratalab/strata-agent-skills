@@ -14,7 +14,7 @@ description: >-
   codes.
 license: MIT
 metadata:
-  strata-core-rev: "6fc481c33473efd7d1724284107b67be08625dcd"
+  strata-core-rev: "5893cbaf5882cb0b0559de25b6c0e7e372cba132"
   cli-version-range: "1.x"
 ---
 

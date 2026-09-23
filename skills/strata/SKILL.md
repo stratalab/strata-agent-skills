@@ -12,7 +12,7 @@ description: >-
   branch/space scoping, and error-code discipline.
 license: MIT
 metadata:
-  strata-core-rev: "6fc481c33473efd7d1724284107b67be08625dcd"
+  strata-core-rev: "5893cbaf5882cb0b0559de25b6c0e7e372cba132"
   cli-version-range: "1.x"
 ---
 
@@ -38,7 +38,7 @@ Two meta-tools anchor everything:
 - **`strata_guide`** returns the full usage guide for the exact CLI version
   you are talking to. Call it first when unsure — it is version-matched truth;
   this skill teaches the concepts and the traps.
-- **`strata_command`** runs any command in the catalog (137 commands; the
+- **`strata_command`** runs any command in the catalog (138 commands; the
   curated tools below cover only the common paths). See
   [the escape hatch](#the-escape-hatch-strata_command).
 

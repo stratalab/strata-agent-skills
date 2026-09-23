@@ -161,7 +161,7 @@ the Strata IDL at the rev pinned in this skill's frontmatter.
 | [`space_exists`](https://stratadb.org/docs/space/exists) | read | Check whether a product space exists on a branch. |
 | [`space_list`](https://stratadb.org/docs/space/list) | read | List product spaces on a branch. |
 
-## vector (23 commands)
+## vector (24 commands)
 | Command | Access | Summary |
 |---|---|---|
 | [`vector_batch_delete`](https://stratadb.org/docs/vector/batch_delete) | write | Delete multiple vectors by key. |
@@ -177,6 +177,7 @@ the Strata IDL at the rev pinned in this skill's frontmatter.
 | [`vector_delete`](https://stratadb.org/docs/vector/delete) | write | Delete one vector key. |
 | [`vector_delete_all`](https://stratadb.org/docs/vector/delete_all) | write | Delete all vectors in a collection. |
 | [`vector_delete_by_filter`](https://stratadb.org/docs/vector/delete_by_filter) | write | Delete vectors matching a metadata filter. |
+| [`vector_update_embedding`](https://stratadb.org/docs/vector/embedding/update) | write | Replace the embedding for one vector, keeping its metadata. |
 | [`vector_exists`](https://stratadb.org/docs/vector/exists) | read | Check whether one vector key exists. |
 | [`vector_get`](https://stratadb.org/docs/vector/get) | read | Read one vector by key. |
 | [`vector_history`](https://stratadb.org/docs/vector/history) | read | Read retained vector history for one key. |
