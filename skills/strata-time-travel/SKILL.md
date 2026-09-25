@@ -13,7 +13,7 @@ description: >-
   copying data, and event-chain verification.
 license: MIT
 metadata:
-  strata-core-rev: "5893cbaf5882cb0b0559de25b6c0e7e372cba132"
+  strata-core-rev: "7bf09c2e3e4fe327aa79c5f12a48add9e2993cf0"
   cli-version-range: "1.x"
 ---
 
@@ -63,11 +63,11 @@ through `strata_command` with the raw wire command:
 <!-- generated:begin asof-commands -->
 - **event** — `event_count`, `event_get`, `event_list`, `event_list_types`
 - **graph** — `graph_bfs`, `graph_cdlp`, `graph_lcc`, `graph_pagerank`, `graph_sssp`, `graph_wcc`, `graph_bindings_for_entity`, `graph_get_edge`, `graph_list`, `graph_get_meta`, `graph_neighbors`, `graph_get_node`, `graph_list_nodes`, `graph_nodes_by_type`, `graph_get_ontology`, `graph_ontology_summary`
-- **json** — `json_count`, `json_get`, `json_list`
+- **json** — `json_batch_get`, `json_count`, `json_get`, `json_list`
 - **kv** — `kv_count`, `kv_get`, `kv_list`
 - **vector** — `vector_count`, `vector_get`, `vector_index_query`, `vector_list_keys`, `vector_query`
 
-All 31 accept **both** `as_of` (commit timeline) and `as_of_time` (wall clock) — one or the other, never both in one call.
+All 32 accept **both** `as_of` (commit timeline) and `as_of_time` (wall clock) — one or the other, never both in one call.
 <!-- generated:end asof-commands -->
 
 ## Reading the trail: history

@@ -12,7 +12,7 @@ description: >-
   branch/space scoping, and error-code discipline.
 license: MIT
 metadata:
-  strata-core-rev: "5893cbaf5882cb0b0559de25b6c0e7e372cba132"
+  strata-core-rev: "7bf09c2e3e4fe327aa79c5f12a48add9e2993cf0"
   cli-version-range: "1.x"
 ---
 
@@ -60,7 +60,7 @@ spread one record across primitives without a reason.
 | Structured records you update field by field | **JSON** | Path-level reads and writes (`$.user.name`), indexes |
 | Things that happened — decisions, tool calls, audit trail | **Events** | Append-only, hash-chained, integrity-verifiable |
 | Text/embeddings you retrieve by similarity | **Vectors** | Collections with k-NN query and metadata filters; a collection can declare an embedding model and take text directly |
-| Entities and relationships you traverse | **Graph** | Typed nodes/edges, neighbors, analytics |
+| Entities and relationships you traverse | **Graph** | Typed nodes/edges, neighbors, analytics; shortest paths report the route, not just the cost |
 
 A useful default for agent memory: JSON for the working record, Events for
 the decision log, Vectors for semantic recall, KV for checkpoints and flags.
@@ -149,6 +149,12 @@ capability is missing because there is no dedicated tool for it.
 ```json
 { "command": { "type": "kv_history", "key": "bm90ZXM=" } }
 ```
+
+Dropping a graph or a vector collection that still holds visible data is
+refused since engine 1.2.5 — `failed_precondition.engine.graph_not_empty` and
+`…vector_collection_not_empty` — and takes `force: true` to proceed. An empty
+one needs nothing. Treat the refusal as the question it is: confirm before
+retrying with force, rather than adding the flag reflexively.
 
 Since engine 1.2.2 a vector collection can declare the model its vectors come
 from (`vector_create_collection` with `embedding_model`, or
