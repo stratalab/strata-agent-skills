@@ -7,7 +7,7 @@ values are base64 on the wire. Each wire type links to its reference page
 the Strata IDL at the rev pinned in this skill's frontmatter.
 
 <!-- generated:begin command-catalog -->
-## admin (11 commands)
+## admin (12 commands)
 | Command | Access | Summary |
 |---|---|---|
 | [`config_get`](https://stratadb.org/docs/admin/config) | read | Read sanitized configuration facts. |
@@ -21,6 +21,7 @@ the Strata IDL at the rev pinned in this skill's frontmatter.
 | [`metrics`](https://stratadb.org/docs/admin/metrics) | read | Read lightweight database metrics. |
 | [`ping`](https://stratadb.org/docs/admin/ping) | read | Check that the database handle is live. |
 | [`remote_get`](https://stratadb.org/docs/admin/remote) | read | Read where this database was cloned from. |
+| [`storage`](https://stratadb.org/docs/admin/storage) | read | Read the database's on-disk footprint. |
 
 ## arrow (2 commands)
 | Command | Access | Summary |

@@ -12,7 +12,7 @@ description: >-
   branch/space scoping, and error-code discipline.
 license: MIT
 metadata:
-  strata-core-rev: "7bf09c2e3e4fe327aa79c5f12a48add9e2993cf0"
+  strata-core-rev: "81a9efbe60e25b84ba9355d3eb1d68001b834f3c"
   cli-version-range: "1.x"
 ---
 
@@ -38,7 +38,7 @@ Two meta-tools anchor everything:
 - **`strata_guide`** returns the full usage guide for the exact CLI version
   you are talking to. Call it first when unsure — it is version-matched truth;
   this skill teaches the concepts and the traps.
-- **`strata_command`** runs any command in the catalog (138 commands; the
+- **`strata_command`** runs any command in the catalog (139 commands; the
   curated tools below cover only the common paths). See
   [the escape hatch](#the-escape-hatch-strata_command).
 
@@ -47,6 +47,16 @@ Every data tool also accepts two optional scope arguments:
 - `branch` — which branch to operate on. Defaults to the branch the session
   was opened on (`default` unless started otherwise).
 - `space` — a namespace within the branch. Defaults to `"default"`.
+
+## Before you open someone's database
+
+Engine 1.2.6 upgrades a durable database's on-disk format when it is opened,
+and an older Strata then refuses that directory — reporting
+`unavailable.engine.persistence`, which reads as a retryable outage but is
+permanent. Opening is enough; no write is needed. If the user may still need
+an older binary or SDK against the same files, say so before you open it, and
+copy the directory first. `strata <db> admin storage` reports the footprint
+afterwards.
 
 ## Choose a primitive
 
@@ -139,7 +149,8 @@ Notes that save round trips:
 
 `strata_command` submits one raw wire command, so the entire catalog is
 reachable even though only the common tools are curated. **History
-(`kv_history`, `json_history`, `vector_history`), wall-clock reads
+(`kv_history`, `json_history`, `vector_history`), the storage footprint
+(`storage`), wall-clock reads
 (`as_of_time`), branch create/delete, branch diff/preview/merge (compare and
 promote), batches, spaces, arrow import/export, graph analytics, StrataHub
 browse and clone (`hub_list_datasets`, `hub_get_dataset`, `hub_clone`), and
