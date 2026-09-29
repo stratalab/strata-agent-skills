@@ -41,6 +41,7 @@ per-code pages above).
 - [`failed_precondition.engine.branch_has_children`](https://stratadb.org/e/failed_precondition.engine.branch_has_children)
 - [`failed_precondition.engine.embedding_model_mismatch`](https://stratadb.org/e/failed_precondition.engine.embedding_model_mismatch)
 - [`failed_precondition.engine.embedding_model_missing`](https://stratadb.org/e/failed_precondition.engine.embedding_model_missing)
+- [`failed_precondition.engine.format_version`](https://stratadb.org/e/failed_precondition.engine.format_version)
 - [`failed_precondition.engine.graph_negative_weight`](https://stratadb.org/e/failed_precondition.engine.graph_negative_weight)
 - [`failed_precondition.engine.graph_not_empty`](https://stratadb.org/e/failed_precondition.engine.graph_not_empty)
 - [`failed_precondition.engine.graph_ontology_edge_type`](https://stratadb.org/e/failed_precondition.engine.graph_ontology_edge_type)
@@ -130,7 +131,6 @@ per-code pages above).
 - [`invalid_argument.engine.product_space`](https://stratadb.org/e/invalid_argument.engine.product_space)
 - [`invalid_argument.engine.product_space_reserved`](https://stratadb.org/e/invalid_argument.engine.product_space_reserved)
 - [`invalid_argument.engine.space_delete_default`](https://stratadb.org/e/invalid_argument.engine.space_delete_default)
-- [`invalid_argument.engine.space_delete_too_large`](https://stratadb.org/e/invalid_argument.engine.space_delete_too_large)
 - [`invalid_argument.engine.vector_batch`](https://stratadb.org/e/invalid_argument.engine.vector_batch)
 - [`invalid_argument.engine.vector_collection`](https://stratadb.org/e/invalid_argument.engine.vector_collection)
 - [`invalid_argument.engine.vector_collection_reserved`](https://stratadb.org/e/invalid_argument.engine.vector_collection_reserved)
@@ -193,6 +193,7 @@ per-code pages above).
 
 ## unsupported
 - [`unsupported.engine.graph_binding_cross_branch`](https://stratadb.org/e/unsupported.engine.graph_binding_cross_branch)
+- [`unsupported.engine.persistence_capability`](https://stratadb.org/e/unsupported.engine.persistence_capability)
 - [`unsupported.executor.arrow_feature_disabled`](https://stratadb.org/e/unsupported.executor.arrow_feature_disabled)
 - [`unsupported.executor.hub_feature_disabled`](https://stratadb.org/e/unsupported.executor.hub_feature_disabled)
 <!-- generated:end error-catalog -->
