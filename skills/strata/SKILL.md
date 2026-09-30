@@ -12,7 +12,7 @@ description: >-
   branch/space scoping, and error-code discipline.
 license: MIT
 metadata:
-  strata-core-rev: "81a9efbe60e25b84ba9355d3eb1d68001b834f3c"
+  strata-core-rev: "87fa1a9c3566a737ae99f9058aaf573da3019d78"
   cli-version-range: "1.x"
 ---
 
@@ -50,8 +50,8 @@ Every data tool also accepts two optional scope arguments:
 
 ## Before you open someone's database
 
-Engine 1.2.6 upgrades a durable database's on-disk format when it is opened,
-and an older Strata then refuses that directory — reporting
+Engine 1.2.6 and later upgrade a durable database's on-disk format when it is
+opened, and an older Strata then refuses that directory — reporting
 `unavailable.engine.persistence`, which reads as a retryable outage but is
 permanent. Opening is enough; no write is needed. If the user may still need
 an older binary or SDK against the same files, say so before you open it, and
